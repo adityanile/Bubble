@@ -33,6 +33,15 @@ public class WandManager : MonoBehaviour
     public float gravityModifier = -9.81f;
     private Vector3 gravity;
 
+    //Resting Position
+    public float wandZoffset;
+    public Transform restinAt;
+    public Vector3 restingAngle;
+
+    public float restSpeed = 10;
+    public float distOffset = 0.5f;
+    private bool setToRest = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -60,6 +69,22 @@ public class WandManager : MonoBehaviour
                 StartCoroutine(DecreaseRate());
             }
         }
+
+        //// Resting
+        //if (setToRest)
+        //{
+        //    Vector3 dir = (restinAt.position - transform.position).normalized;
+        //    float distance = Vector3.Distance(transform.position, restinAt.position);
+
+        //    if (distance > distOffset)
+        //    {
+        //        transform.Translate(dir * Time.deltaTime * restSpeed);
+        //    }
+        //    else
+        //    {
+        //        setToRest = false;
+        //    }
+        //}
     }
 
     IEnumerator DecreaseRate()
@@ -92,6 +117,10 @@ public class WandManager : MonoBehaviour
 
     void OnMouseDown()
     {
+        // Setting wand to 
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y, wandZoffset);
+        transform.position = pos;
+
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
 
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
@@ -115,6 +144,9 @@ public class WandManager : MonoBehaviour
         // Stop spawing the balloons
         StopCoroutine(SpawnBubbles());
         alreadySpawing = false;
+
+        // Set to rest
+        setToRest = true;
     }
 
     // Spawing the bubbles when wand is moved

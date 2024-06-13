@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class FaceManager : MonoBehaviour
 {
-    public GameObject wand;
+    private GameObject wand;
     public float offset = 0.2f;
+
+    public Transform lookingAt;
 
     private void Start()
     {
         wand = GameObject.Find("Wand");
+        lookingAt = wand.transform.GetChild(0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(wand.transform);
+        transform.LookAt(lookingAt);
     }
 }
